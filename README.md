@@ -11,6 +11,7 @@ This dashboard tracks the current state of development across the Silent Payment
 
 | Project | Description | Status | Lead
 |--------|-------------|--------|------|
+| **[Central Hub](https://silentpayments.xyz/)** | Silent Payments | ⚙️ | @sethforprivacy
 | **[Visual Roadmap](diagrams/project_overview.mmd)** | Flowchart of SP ecosystem | ⚙️ | Open
 | **[Wallet UX](diagrams/wallet_ux.mmd)** | SP User Flow | ⚙️ | Open
 | **[Tracker](https://docs.google.com/spreadsheets/d/1dXCiAF37UUDs6Hv8jtdQAqfZG6EpwURwCcTk90qnU8g/edit)** | Development Status | ⚙️ | @macgyver
