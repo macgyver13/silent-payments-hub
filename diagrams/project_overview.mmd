@@ -1,0 +1,92 @@
+---
+config:
+ layout: dagre
+ elk:
+  mergeEdges: true
+  nodePlacementStrategy: SIMPLE
+---
+%%{init: {
+	'htmlLabels': true,
+	'curve': 'linear',
+	'theme':'dark',
+	'themeVariables': {
+		'lineColor': ' #bbbbbb',
+		'clusterBkg': ' #303030'
+	}
+}}%%
+graph TD
+	bip352(Silent Payments
+	BIP352)
+%% Core Nodes
+	subgraph core[Library / Reference]
+		subgraph Rust
+			rust-bitcoin
+			rust-sp(rust-silentpayments)
+		end
+		subgraph bitcoin-core[Bitcoin Core]
+			lib-secp(libsecp256k1)
+			wallet-send(Wallet Send)
+			wallet-recv(Wallet Receive)
+		end
+	end
+%% Wallet Nodes
+	subgraph wallets[Wallets]
+		sparrow(Sparrow Wallet)
+		BitBox02
+		blue-wallet(Blue Wallet
+		Send)
+		subgraph rust-wallet[Rust]
+			sp-client(sp-client
+			Silent Payment 
+			Wallet Library)
+			bdk-wallet(BDK Wallet)
+			cake-wallet("Cake Wallet
+			(Send+Recv)")
+			dana-wallet("Dana Wallet
+			(Send+Recv)")
+		end
+	end
+	
+%% Server Nodes
+	subgraph servers[Servers]
+		subgraph Demo
+			Silentiumd
+			BlindBit(BlindBit Oracle)
+			SilentServer(Silent Server)
+		end
+		subgraph Active
+			CakeElectrs(Cake Wallet Electrs)
+		end
+	end
+	subgraph ElectrumServer[Electrum Server]
+		electrs(Electrs)
+		electrum(Electrum)
+	end
+
+%% Connectors
+	bip352--> core
+	core ---> wallets
+	lib-secp -- Waiting --> wallet-send
+	lib-secp ==> wallet-recv
+	wallets ---> servers
+	rust-bitcoin --> electrs
+	electrs & electrum ==> sparrow
+	
+%% Style Definitions
+    classDef active stroke:#067b06
+	classDef critical_path stroke: #FFA500
+	classDef critical_inactive stroke-width:2,color: #c80c0c,fill: #303030
+	classDef inuse fill:#1d2f1d
+	classDef waiting stroke: #00a000,color: #00a000
+    class lib-secp active
+	class sp-client,cake-wallet,dana-wallet,rust-bitcoin,rust-sp inuse
+	class lib-secp,electrs,wallet-send,wallet-recv,sparrow critical_path
+	class sparrow,wallet-recv critical_inactive
+	linkStyle 3,5,6,7 stroke: #FFA500
+
+%% Links
+    click bip352 href "https://github.com/bitcoin/bips/blob/master/bip-0352.mediawiki" "Silent Payment BIP" _blank
+	click lib-secp href "https://github.com/bitcoin-core/secp256k1/pull/1519" _blank
+	click wallet-send href "https://github.com/bitcoin/bitcoin/pull/28201" _blank
+	click electrs href "https://github.com/romanz/electrs/pull/1075" _blank
+	click wallet-recv href "Not Available" "Not Available" _blank

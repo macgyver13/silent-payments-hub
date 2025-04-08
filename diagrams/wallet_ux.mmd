@@ -1,0 +1,32 @@
+sequenceDiagram
+  participant User
+  participant Wallet (Client)
+  participant Scan Server (optional)
+  participant Bitcoin Network
+
+  Note over User, Wallet (Client): Wallet Setup
+  User->>Wallet (Client): Generate Scan Secret + Spend Key
+  Wallet (Client)->>Wallet (Client): Derive Silent Payment Address
+  Wallet (Client)-->>User: Share SP Address (public)
+
+  Note over Bitcoin Network, Wallet (Client): Sender sends BTC to SP address<br>SP receiver must scan blockchain to detect it
+
+  Note over Wallet (Client), Scan Server: Receiving Funds
+  alt Using Own Scanner
+    Wallet (Client)->>Bitcoin Network: Fetch block data
+    Wallet (Client)->>Wallet (Client): Scan for tweaked outputs (Scan Key)
+  else Outsourced Scanner
+    Wallet (Client)->>Scan Server: Register Scan key
+    Scan Server->>Bitcoin Network: Index block tweaks
+    Scan Server->>Wallet (Client): Return matching UTXOs
+  end
+
+  Wallet (Client)-->>User: Show updated balance (UTXOs found)
+
+  Note over Wallet (Client): Spending Funds
+  Wallet (Client)->>Wallet (Client): Derive tweak from Spend key
+  Wallet (Client)->>Bitcoin Network: Broadcast transaction
+
+  Bitcoin Network->>Recipient: Funds arrive (standard output)
+
+  Note over User: Privacy preserved throughout
