@@ -1,32 +1,89 @@
+---
+config:
+  diagramMarginY: 100
+  noteMargin: 20
+  noteAlign: center
+  mirrorActors: true
+---
+%%{init: {'themeVariables': {
+  'noteBkgColor':'#333',
+  'noteTextColor': '#cccccc',
+  'fontSize': '30px',
+  'noteFontSize': '30px',
+  'fontFamily': 'verdana'
+}}}%%
+
 sequenceDiagram
-  participant User
-  participant Wallet (Client)
-  participant Scan Server (optional)
-  participant Bitcoin Network
+%% autonumber
+  actor Sender
+  actor User
+  participant Wallet as Wallet (Client)
+  participant MyScanServer as Scan Server (Own)
+  participant Bitcoin as Bitcoin Network
+  participant HostedScanServer as Scan Server (Hosted)
+  actor Recipient
 
-  Note over User, Wallet (Client): Wallet Setup
-  User->>Wallet (Client): Generate Scan Secret + Spend Key
-  Wallet (Client)->>Wallet (Client): Derive Silent Payment Address
-  Wallet (Client)-->>User: Share SP Address (public)
+  Note over User, Wallet: Wallet Setup
+  User->>Wallet: Generate Scan Secret + Spend Key
+  Wallet->>Wallet: Derive Silent Payment Address
+  Wallet-->>User: Share SP Address (public)
 
-  Note over Bitcoin Network, Wallet (Client): Sender sends BTC to SP address<br>SP receiver must scan blockchain to detect it
-
-  Note over Wallet (Client), Scan Server: Receiving Funds
-  alt Using Own Scanner
-    Wallet (Client)->>Bitcoin Network: Fetch block data
-    Wallet (Client)->>Wallet (Client): Scan for tweaked outputs (Scan Key)
-  else Outsourced Scanner
-    Wallet (Client)->>Scan Server: Register Scan key
-    Scan Server->>Bitcoin Network: Index block tweaks
-    Scan Server->>Wallet (Client): Return matching UTXOs
+  Note over Sender: Sender sends BTC to SP address
+  Sender->>Wallet: Sender computes recipient address for this transaction (tweak key)
+  Wallet->>Bitcoin: Broadcast transaction
+  
+  Note over User, Wallet: Receiving Funds
+  rect rgb(55,55,55)
+  alt Wallet Scanner (Private)
+  Note over User, MyScanServer: Wallet does all the work <br>(Least complex, Most compute)
+    Wallet->>Bitcoin: Fetch block data (All or Block Filter?)
+    Wallet->>Wallet: Scan for tweaked outputs (Scan Key)
+  else Own Scanner (Private / Fast)  
+    rect rgb(75,55,55)
+      Note over User, MyScanServer: Least wallet development requried <br> ("Prefered" Balance Privacy + UX, Distributed compute)
+      rect rgb(55,55,75)
+        Note over User, Wallet: Scanner Registration - one time
+        Wallet->>MyScanServer: Register Scan key
+        loop For Each Block
+          MyScanServer-->>MyScanServer: Scan for tweaked outputs (Scan Key)
+        end
+      end
+      rect rgb(55,55,95)
+        Note over User, Wallet: Typical Wallet UX
+        User->>Wallet: Check Balance
+        Wallet->>MyScanServer: Fetch new UTXOs
+        MyScanServer->>Wallet: Return matching UTXOs
+        Wallet-->>Wallet: Update Balance
+        Wallet-->>User: Show updated balance (UTXOs found)
+      end
+    end
+  else Outsourced Scanner (Fast / Trust Required)
+    rect rgb(40, 62, 53)
+      Note over User, MyScanServer: More wallet development requried <br> (Best UX for Light Clients, Least Private )
+      Bitcoin->>HostedScanServer: New Block
+      loop For Each Block
+        HostedScanServer-->>HostedScanServer: Index all tweaks that meet BIP352 spec <br> ? discard spent?
+      end
+      rect rgb(55,75,55)
+        alt Subscribe or Bulk Download?
+          rect rgb(55,75,75)
+            Wallet->>HostedScanServer: Request all tweaks from last block checked for a given Scan Key
+            HostedScanServer->>Wallet: Return matching UTXOs
+          end
+        else
+          rect rgb(75,75,55)
+            Wallet->>HostedScanServer: Request tweaks for block or range of blocks (more privacy/more data) <br> ? Should this be supported?
+            HostedScanServer->>Wallet: Return all tweaks for range
+          end
+        end
+      end
+    end
+  end
   end
 
-  Wallet (Client)-->>User: Show updated balance (UTXOs found)
+  Note over User, Wallet: Spending Funds
+  Wallet->>Wallet: Derive tweak from Spend key
+  Wallet->>Bitcoin: Broadcast transaction
+  Bitcoin->>Recipient: Funds arrive (standard output)
 
-  Note over Wallet (Client): Spending Funds
-  Wallet (Client)->>Wallet (Client): Derive tweak from Spend key
-  Wallet (Client)->>Bitcoin Network: Broadcast transaction
-
-  Bitcoin Network->>Recipient: Funds arrive (standard output)
-
-  Note over User: Privacy preserved throughout
+Note over Wallet: Wallet Recovery? <br> scan all taproot outputs since wallet birthday
