@@ -38,7 +38,7 @@ This dashboard tracks the current state of development across the Silent Payment
 | **Cake Wallet** | ✅ | ✅ (but slow) | ⚙️ | Cake Team | Needs indexing perf |
 | **BlueWallet** | ✅ | ❌ | ✅ Partial | ? | Experimental branch |
 | **Bitcoin Core** | ⚙️ | ⛔ | ⛔ | See above | Blocked on libsecp256k1 |
-| **Dana wallet** | ✅ | ✅ | ⚙️️ | [cygnet](https://github.com/cygnet3) |  |
+| **Dana wallet** | ✅ | ✅ | 🧪 | [cygnet](https://github.com/cygnet3) |  |
 
 ---
 
@@ -59,7 +59,7 @@ This dashboard tracks the current state of development across the Silent Payment
 | Topic | Description | Status | Lead / Contact | Notes |
 |-------|-------------|--------|----------------|-------|
 | **Light Client Protocol** | Fetch tweaks from server | 🧪 / 🆘 | @setavenger (?) | [Delving Discussion](https://delvingbitcoin.org/t/silent-payments-light-client-protocol/891) |
-| **UX Guidelines** | Reusable address + Bolt12 design | 🆘 | [@yashrajd](https://github.com/yashrajd/) | [How it works: Silent payments](https://bitcoin.design/guide/how-it-works/silent-payments/) |
+| **UX Guidelines** | Reusable address + Bolt12 design | ✅ | [@yashrajd](https://github.com/yashrajd/) | [How it works: Silent payments](https://bitcoin.design/guide/how-it-works/silent-payments/) |
 | **BIP-353** | Human-readable address format | ⚙️ | ? | Future enhancement |
 
 ---
