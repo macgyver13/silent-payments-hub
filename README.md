@@ -16,7 +16,7 @@ This dashboard tracks the current state of development across the Silent Payment
 | **[Wallet UX](diagrams/wallet_ux.mmd)** | SP User Flow | ⚙️ | Open
 | **[Tracker](https://docs.google.com/spreadsheets/d/1dXCiAF37UUDs6Hv8jtdQAqfZG6EpwURwCcTk90qnU8g/edit)** | Development Status | ⚙️ | @macgyver
 | **[Roadmap](https://docs.google.com/document/d/1ggtPmJWvPCzSoAw0slX4indRDsbm4reDeMjBXreCAzs/edit?tab=t.0)** | Strategy Overview | ⚙️ | @macgyver
-| **Discord Server** | Dev coordination hub | 🆘 | ? / @yashraj
+| **Discord Server** | Dev coordination hub | 🆘 | yashraj
 
 ---
 
