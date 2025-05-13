@@ -58,7 +58,7 @@ This dashboard tracks the current state of development across the Silent Payment
 | Topic | Description | Status | Lead / Contact | Notes |
 |-------|-------------|--------|----------------|-------|
 | **Light Client Protocol** | Fetch tweaks from server | 🧪 / 🆘 | @setavenger (?) | [Delving Discussion](https://delvingbitcoin.org/t/silent-payments-light-client-protocol/891) |
-| **UX Guidelines** | Reusable address + Bolt12 design | 🆘 | @yashrajd | [How it works: Silent payments](https://bitcoin.design/guide/how-it-works/silent-payments/) |
+| **UX Guidelines** | Reusable address + Bolt12 design | 🆘 | [@yashrajd](https://github.com/yashrajd/) | [How it works: Silent payments](https://bitcoin.design/guide/how-it-works/silent-payments/) |
 | **BIP-353** | Human-readable address format | ⚙️ | ? | Future enhancement |
 
 ---
