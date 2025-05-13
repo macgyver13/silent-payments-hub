@@ -38,7 +38,7 @@ This dashboard tracks the current state of development across the Silent Payment
 | **Cake Wallet** | ✅ | ✅ (but slow) | ⚙️ | Cake Team | Needs indexing perf |
 | **BlueWallet** | ✅ | ❌ | ✅ Partial | ? | Experimental branch |
 | **Bitcoin Core** | ⚙️ | ⛔ | ⛔ | See above | Blocked on libsecp256k1 |
-| **Dana wallet** | ✅ | ✅ | ⚙️️ | [cygnet](https://github.com/cygnet3) | Blocked on libsecp256k1 |
+| **Dana wallet** | ✅ | ✅ | ⚙️️ | [cygnet](https://github.com/cygnet3) |  |
 
 ---
 
