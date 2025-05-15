@@ -16,7 +16,7 @@ This dashboard tracks the current state of development across the Silent Payment
 | **[Wallet UX](diagrams/wallet_ux.mmd)** | SP User Flow | ⚙️ | Open
 | **[Tracker](https://docs.google.com/spreadsheets/d/1dXCiAF37UUDs6Hv8jtdQAqfZG6EpwURwCcTk90qnU8g/edit)** | Development Status | ⚙️ | @macgyver
 | **[Roadmap](https://docs.google.com/document/d/1ggtPmJWvPCzSoAw0slX4indRDsbm4reDeMjBXreCAzs/edit?tab=t.0)** | Strategy Overview | ⚙️ | @macgyver
-| **Discord Server** | Dev coordination hub | 🆘 | ? / @yashraj
+| **[Discord Server](https://discord.gg/AE4DwDhAPZ)** | Dev coordination hub | ✅ | yashraj
 
 ---
 
@@ -38,6 +38,7 @@ This dashboard tracks the current state of development across the Silent Payment
 | **Cake Wallet** | ✅ | ✅ (but slow) | ⚙️ | Cake Team | Needs indexing perf |
 | **BlueWallet** | ✅ | ❌ | ✅ Partial | ? | Experimental branch |
 | **Bitcoin Core** | ⚙️ | ⛔ | ⛔ | See above | Blocked on libsecp256k1 |
+| **Dana wallet** | ✅ | ✅ | 🧪 | [cygnet](https://github.com/cygnet3) |  |
 
 ---
 
@@ -45,7 +46,7 @@ This dashboard tracks the current state of development across the Silent Payment
 
 | Project | Description | Status | Lead | Links / Notes |
 |---------|-------------|--------|------|----------------|
-| **BlindBit Oracle** | Full-stack SP proof of concept | 🧪 | @yashraj (?) | Needs status update |
+| **BlindBit Oracle** | Full-stack SP proof of concept | 🧪 | ? | Needs status update |
 | **Electrs** | SP tweaks in Electrs | ⚙️ | @romanz| [PR 1075](https://github.com/romanz/electrs/pull/1075) |
 | **Blockstream Esplora** | Heavy index, possible SP support | 🧪 | ? | [Cake fork](https://github.com/cake-tech/blockstream-electrs/tree/cake-update-v1) |
 | **New SP Indexer** | Optimized tweak vending indexer | 🆘 | Open | Idea: filter for unspent only |
@@ -58,7 +59,7 @@ This dashboard tracks the current state of development across the Silent Payment
 | Topic | Description | Status | Lead / Contact | Notes |
 |-------|-------------|--------|----------------|-------|
 | **Light Client Protocol** | Fetch tweaks from server | 🧪 / 🆘 | @setavenger (?) | [Delving Discussion](https://delvingbitcoin.org/t/silent-payments-light-client-protocol/891) |
-| **UX Guidelines** | Reusable address + Bolt12 design | 🆘 | Open | Needed for broad adoption |
+| **UX Guidelines** | Reusable address + Bolt12 design | ✅ | [@yashrajd](https://github.com/yashrajd/) | [Bitcoin Design Guide page](https://bitcoin.design/guide/how-it-works/silent-payments/) |
 | **BIP-353** | Human-readable address format | ⚙️ | ? | Future enhancement |
 
 ---
