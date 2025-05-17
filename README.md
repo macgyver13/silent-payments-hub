@@ -3,7 +3,7 @@
 This dashboard tracks the current state of development across the Silent Payments ecosystem, helping contributors quickly find projects, understand their status, and get involved.
 
 > 💡 **Legend**
-> ✅ Complete & working | ⚙️ In Progress | 🆘 Help Wanted | ⛔ Blocked | 🧪 Experimental
+> ✅ Complete & working | ⚙️ In Progress | 🆘 Help Wanted | ⛔ Blocked | 🧪 Experimental | ❌ Not Available
 
 ---
 
@@ -14,8 +14,8 @@ This dashboard tracks the current state of development across the Silent Payment
 | **[Central Hub](https://silentpayments.xyz/)** | Silent Payments | ⚙️ | @sethforprivacy
 | **[Visual Roadmap](diagrams/project_overview.mmd)** | Flowchart of SP ecosystem | ⚙️ | Open
 | **[Wallet UX](diagrams/wallet_ux.mmd)** | SP User Flow | ⚙️ | Open
-| **[Tracker](https://docs.google.com/spreadsheets/d/1dXCiAF37UUDs6Hv8jtdQAqfZG6EpwURwCcTk90qnU8g/edit)** | Development Status | ⚙️ | @macgyver
-| **[Roadmap](https://docs.google.com/document/d/1ggtPmJWvPCzSoAw0slX4indRDsbm4reDeMjBXreCAzs/edit?tab=t.0)** | Strategy Overview | ⚙️ | @macgyver
+| **[Tracker](https://docs.google.com/spreadsheets/d/1dXCiAF37UUDs6Hv8jtdQAqfZG6EpwURwCcTk90qnU8g/edit)** | Development Status | ⚙️ | macgyver
+| **[Roadmap](https://docs.google.com/document/d/1ggtPmJWvPCzSoAw0slX4indRDsbm4reDeMjBXreCAzs/edit?tab=t.0)** | Strategy Overview | ⚙️ | macgyver
 | **[Discord Server](https://discord.gg/AE4DwDhAPZ)** | Dev coordination hub | ✅ | yashraj
 
 ---
@@ -26,6 +26,7 @@ This dashboard tracks the current state of development across the Silent Payment
 |----------|-------------|--------|----------------|-------|
 | `libsecp256k1` SP module | Cryptographic primitives for Silent Payments | ⚙️ In Progress | @josibake | [PR #1519](https://github.com/bitcoin-core/secp256k1/pull/1519) |
 | Bitcoin Core (send/receive) | SP wallet support in Bitcoin Core | ⛔ Blocked (on above) | @josibake / @Eunovo | [Issue #28536](https://github.com/bitcoin/bitcoin/issues/28536) |
+| BDK | SP wallet support in BDK | 🧪 | nymius | [develop](https://github.com/bitcoindevkit/bdk-sp) |
 
 ---
 
@@ -33,12 +34,13 @@ This dashboard tracks the current state of development across the Silent Payment
 
 | Wallet | Send | Receive | Status | Lead / Contact | Notes |
 |--------|------|---------|--------|----------------|-------|
-| **Sparrow** | ✅ | ⚙️ | 🆘 Receiving WIP | ? | Needs indexer coordination |
+| **Sparrow** |  🆘 |  🆘 | 🆘 Receiving WIP | ? | Needs indexer coordination |
 | **BitBox02** | ✅ | ❌ | ✅ Partial | ShiftCrypto | Send-only |
 | **Cake Wallet** | ✅ | ✅ (but slow) | ⚙️ | Cake Team | Needs indexing perf |
-| **BlueWallet** | ✅ | ❌ | ✅ Partial | ? | Experimental branch |
+| **BlueWallet** | ✅ | ❌ | ✅ Partial | Overtorment | Experimental branch |
 | **Bitcoin Core** | ⚙️ | ⛔ | ⛔ | See above | Blocked on libsecp256k1 |
 | **Dana wallet** | ✅ | ✅ | 🧪 | [cygnet](https://github.com/cygnet3) |  |
+| **BlindBit** | ✅ | ✅ | 🧪 | [setavenger](https://github.com/setavenger) | Full Stack + Indexing |
 
 ---
 
@@ -66,6 +68,6 @@ This dashboard tracks the current state of development across the Silent Payment
 
 ## 📌 How to Contribute
 
-→ Join the Discord (invite coming soon)
+→ Join the [Discord](https://discord.gg/AE4DwDhAPZ)
 → Start with an issue tagged `help wanted`
 
