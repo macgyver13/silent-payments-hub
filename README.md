@@ -1,4 +1,4 @@
-## Silent Payments Developer Dashboard
+## [Silent Payments](https://github.com/bitcoin/bips/blob/master/bip-0352.mediawiki) Developer Dashboard
 
 This dashboard tracks the current state of development across the Silent Payments ecosystem, helping contributors quickly find projects, understand their status, and get involved.
 
@@ -11,7 +11,8 @@ This dashboard tracks the current state of development across the Silent Payment
 
 | Project | Description | Status | Lead
 |--------|-------------|--------|------|
-| **[Central Hub](https://silentpayments.xyz/)** | Silent Payments | ⚙️ | @sethforprivacy
+| **[Silent payments UX](https://bitcoin.design/guide/how-it-works/silent-payments/)** | Bitcoin Design Guide page | ✅ | yashrajd 
+| **[Central Hub](https://silentpayments.xyz/)** | Silent Payments | ⚙️ | [sethforprivacy](https://github.com/sethforprivacy)
 | **[Tracker](https://docs.google.com/spreadsheets/d/1dXCiAF37UUDs6Hv8jtdQAqfZG6EpwURwCcTk90qnU8g)** | Development Status | ⚙️ | macgyver13
 | **[Roadmap](https://docs.google.com/document/d/1ggtPmJWvPCzSoAw0slX4indRDsbm4reDeMjBXreCAzs/edit?tab=t.0)** | Strategy Overview | ⚙️ | macgyver13
 | **[Discord Server](https://discord.gg/AE4DwDhAPZ)** | Dev coordination hub | ✅ | yashraj
@@ -59,14 +60,4 @@ This dashboard tracks the current state of development across the Silent Payment
 | Topic | Description | Status | Lead / Contact | Notes |
 |-------|-------------|--------|----------------|-------|
 | **Light Client Protocol** | Fetch tweaks from server | 🧪 / 🆘 | @setavenger | [Delving Discussion](https://delvingbitcoin.org/t/silent-payments-light-client-protocol/891) |
-| **UX Guidelines** | Reusable address + Bolt12 design | ✅ | [@yashrajd](https://github.com/yashrajd/) | [Bitcoin Design Guide page](https://bitcoin.design/guide/how-it-works/silent-payments/) |
-| **BIP-353** | Human readable address format | ⚙️ | ? | [Design Guide](https://bitcoin.design/guide/how-it-works/human-readable-addresses/) |
-
----
-
-## 📌 How to Contribute
-
-→ Join the [Discord](https://discord.gg/AE4DwDhAPZ)
-
-→ Start with an issue tagged `help wanted`
 
