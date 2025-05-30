@@ -51,8 +51,6 @@ This dashboard tracks the current state of development across the Silent Payment
 | **BlindBit Oracle** | Full-stack SP proof of concept | 🧪 | @setavenger | Needs status update |
 | **Electrs** | SP tweaks in Electrs | ⚙️ | @romanz| [PR 1075](https://github.com/romanz/electrs/pull/1075) |
 | **Cake's Esplora fork** | Heavy index, possible SP support | 🧪 | ? | [Cake fork](https://github.com/cake-tech/blockstream-electrs/tree/cake-update-v1) |
-| **New SP Indexer** | Optimized tweak vending indexer | 🆘 | Open | Idea: filter for unspent only |
-| **Outsourced Scanning Server** | Server does scanning for client | 🧪 | Open | UX tradeoff vs privacy |
 
 ---
 
