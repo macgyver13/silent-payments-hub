@@ -36,7 +36,7 @@ This dashboard tracks the current state of development across the Silent Payment
 |--------|------|---------|--------|----------------|-------|
 | **Sparrow** |  🆘 |  🆘 | 🆘 | Open | Needs indexer coordination |
 | **BitBox02** | ✅ | ❌ | ✅ Partial | ShiftCrypto | Send-only |
-| **Cake Wallet** | ✅ | ✅ (but slow) | ⚙️ | Cake Team | Needs indexing perf |
+| **Cake Wallet** | ✅ | ✅ | ✅ | Cake Team |  |
 | **BlueWallet** | ✅ | ❌ | ✅ Partial | Overtorment | Experimental branch |
 | **Bitcoin Core** | ⚙️ | ⛔ | ⛔ | @josibake / @eunovo | Blocked on libsecp256k1 |
 | **Dana wallet** | ✅ | ✅ | 🧪 | [cygnet](https://github.com/cygnet3) |  |
