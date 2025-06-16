@@ -9,11 +9,11 @@ go build -o blindbit-oracle ./src
 
 #### configure blindbit.toml
 
-```_
+```
 cp blindbit.example.toml ~/.blindbit-oracle/blindbit.toml
 ```
 
-```_
+```
 host = "0.0.0.0:8000"
 chain = "main"
 rpc_endpoint = "http://127.0.0.1:8332"
@@ -52,7 +52,7 @@ index 96e7404..f03e952 100644
         }
 ```
 
-# Execution
+# Usage
 
 Start server indexing
 
