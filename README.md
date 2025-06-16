@@ -60,3 +60,8 @@ This dashboard tracks the current state of development across the Silent Payment
 |-------|-------------|--------|----------------|-------|
 | **Light Client Protocol** | Fetch tweaks from server | 🧪 / 🆘 | @setavenger | [Delving Discussion](https://delvingbitcoin.org/t/silent-payments-light-client-protocol/891) |
 
+---
+
+### Testing & Evaluation
+
+* [blindbit-oracle](testing/blindbit-oracle.md)
