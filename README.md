@@ -16,7 +16,7 @@ This dashboard tracks the current state of development across the Silent Payment
 | **[Central Hub](https://silentpayments.xyz/)** | Silent Payments | ⚙️ | [sethforprivacy](https://github.com/sethforprivacy)
 | **[Tracker](https://docs.google.com/spreadsheets/d/1dXCiAF37UUDs6Hv8jtdQAqfZG6EpwURwCcTk90qnU8g)** | Development Status | ⚙️ | macgyver13
 | **[Roadmap](https://docs.google.com/document/d/1ggtPmJWvPCzSoAw0slX4indRDsbm4reDeMjBXreCAzs/edit?tab=t.0)** | Strategy Overview | ⚙️ | macgyver13
-| **[Discord Server](https://discord.gg/AE4DwDhAPZ)** | Dev coordination hub | ✅ | yashraj
+| **[Discord Server](https://discord.gg/UFF2u6hxBf)** | Dev coordination hub | ✅ | yashraj
 
 ---
 
@@ -65,3 +65,13 @@ This dashboard tracks the current state of development across the Silent Payment
 ### Testing & Evaluation
 
 * [blindbit-oracle](testing/blindbit-oracle.md)
+* [bluewallet](testing/bluewallet.md)
+* [seedsigner](testing/seedsigner.md)
+
+#### Vectors
+
+| Area | Project |
+|------|---------|
+| Address Encoding | [bdk-sp](https://github.com/bitcoindevkit/bdk-sp/blob/3842af15d0bf3440e357ee17ca02a2cef74af60d/silentpayments/src/encoding/mod.rs#L179-L279) |
+| Send + Receive | [BIP352](https://github.com/bitcoin/bips/blob/master/bip-0352/send_and_receive_test_vectors.json) |
+

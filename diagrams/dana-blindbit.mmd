@@ -1,0 +1,24 @@
+sequenceDiagram
+    participant Scanner as Dana Wallet
+    participant BP as Blindbit-Oracle
+    participant BC as Bitcoin Core Node
+
+
+    Scanner-->>+BP: subscribe new blocks
+
+    BC-->>BP: New Block
+    Note right of BP: compute tweak 
+    Note right of BP: index unspent outputs
+    BP-->>BP: compute tweak
+    BP-->>BP: compute spent
+    BP-->>BP: build taproot GCS filter
+    BP-->>-Scanner: new block
+
+
+    Scanner->>+BP: Request tweaks & UTXOs for block(s)
+    BP-->>-Scanner: Tweaks & relevant UTXOs
+
+    Scanner->>+BP: Request filters
+
+    BP-->>-Scanner: utxo and outpoint filters
+    Scanner-->>Scanner: calculate UTXOs
