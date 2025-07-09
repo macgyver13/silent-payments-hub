@@ -48,15 +48,21 @@
           ANDROID_SDK_ROOT = "${androidComposition.androidsdk}/libexec/android-sdk";
           ANDROID_HOME = "${androidComposition.androidsdk}/libexec/android-sdk";
           ANDROID_NDK_HOME = "${androidComposition.androidsdk}/libexec/android-sdk/ndk/26.3.11579264";
-          RUSTUP_HOME = "${builtins.getEnv "HOME"}/.danawallet/rustup";
-          CARGO_HOME = "${builtins.getEnv "HOME"}/.danawallet/cargo";
-          GRADLE_USER_HOME = "${builtins.getEnv "HOME"}/.danawallet/gradle";
+          
           JAVA_HOME = "${pkgs.jdk17}";
-          ANDROID_USER_HOME = "${builtins.getEnv "HOME"}/.danawallet/android";
           
           shellHook = ''
             export PATH="${androidComposition.androidsdk}/libexec/android-sdk/emulator:${androidComposition.androidsdk}/libexec/android-sdk/platform-tools:${androidComposition.androidsdk}/libexec/android-sdk/tools/bin:$PATH"
             
+            # Make it obvious we're in nix develop mode
+            export PS1="[nix:dev] $PS1"
+
+            # Set up home-based directories
+            export ANDROID_USER_HOME="$HOME/.danawallet/android";
+            export CARGO_HOME="$HOME/.danawallet/cargo";
+            export GRADLE_USER_HOME="$HOME/.danawallet/gradle";
+            export RUSTUP_HOME="$HOME/.danawallet/rustup";
+
             # Initialize rustup if needed
             if [ ! -d "$RUSTUP_HOME" ]; then
               echo "Initializing rustup..."

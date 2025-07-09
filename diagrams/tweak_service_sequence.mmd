@@ -22,11 +22,12 @@ sequenceDiagram
     %% Wallet requests from Block Processor (does not trigger block fetch)
     Scanner->>+BP: Request tweaks & UTXOs for block(s)
     BP-->>-Scanner: Tweaks & relevant UTXOs
+    Scanner-->>Scanner: compute_spouts(tweaks, scan_sk, spend_pk)
 
     Scanner->>+BFM: Request filters
     BFM-->>BFM: build taproot GCS filter
     BFM-->>-Scanner: utxo and outpoint filters
-    Scanner-->>Scanner: calculate UTXOs
+    Scanner-->>Scanner: calculate UTXOs - check_spouts(spouts, filter)
     
     Note over Wallet,Scanner: async update
     Wallet-->>+Scanner: subscribe to UTXOs

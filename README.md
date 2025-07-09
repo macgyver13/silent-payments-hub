@@ -48,7 +48,7 @@ This dashboard tracks the current state of development across the Silent Payment
 
 | Project | Description | Status | Lead | Links / Notes |
 |---------|-------------|--------|------|----------------|
-| **BlindBit Oracle** | Full-stack SP proof of concept | 🧪 | @setavenger | Needs status update |
+| **BlindBit Oracle** | Full-stack SP proof of concept | 🧪 | @setavenger | [Repo](https://github.com/setavenger/blindbit-oracle) |
 | **Electrs** | SP tweaks in Electrs | ⚙️ | @romanz| [PR 1075](https://github.com/romanz/electrs/pull/1075) |
 | **Cake's Esplora fork** | Heavy index, possible SP support | 🧪 | ? | [Cake fork](https://github.com/cake-tech/blockstream-electrs/tree/cake-update-v1) |
 
@@ -67,6 +67,8 @@ This dashboard tracks the current state of development across the Silent Payment
 * [blindbit-oracle](testing/blindbit-oracle.md)
 * [bluewallet](testing/bluewallet.md)
 * [seedsigner](testing/seedsigner.md)
+
+---
 
 #### Vectors
 
