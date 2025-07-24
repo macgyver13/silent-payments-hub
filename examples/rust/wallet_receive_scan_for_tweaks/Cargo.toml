@@ -1,0 +1,13 @@
+[package]
+name = "wallet_receive_scan_for_tweaks"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "wallet_receive_scan_for_tweaks"
+path = "src/main.rs"
+
+[dependencies]
+bitcoin = "0.32"
+bip39 = "2.0"
+hex = "0.4"
