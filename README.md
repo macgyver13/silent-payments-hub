@@ -25,8 +25,8 @@ This dashboard tracks the current state of development across the Silent Payment
 | Component | Description | Status | Lead / Contact | Links |
 |----------|-------------|--------|----------------|-------|
 | `libsecp256k1` SP module | Cryptographic primitives for Silent Payments | ⚙️ In Progress | @josibake | [PR #1519](https://github.com/bitcoin-core/secp256k1/pull/1519) |
-| Bitcoin Core (send/receive) | SP wallet support in Bitcoin Core | ⛔ Blocked (on above) | @josibake / @eunovo | [Issue #28536](https://github.com/bitcoin/bitcoin/issues/28536) |
-| BDK | SP wallet support in BDK | 🧪 | [nymius](https://github.com/nymius) | [develop](https://github.com/bitcoindevkit/bdk-sp) |
+| Bitcoin Core (352 tracker) | SP wallet support in Bitcoin Core | ⚙️ In Progress | @josibake / @eunovo | [Issue #28536](https://github.com/bitcoin/bitcoin/issues/28536) |
+| BDK | SP wallet support in BDK | ⚙️ | [nymius](https://github.com/nymius) | [develop](https://github.com/bitcoindevkit/bdk-sp) |
 
 ---
 
@@ -34,13 +34,14 @@ This dashboard tracks the current state of development across the Silent Payment
 
 | Wallet | Send | Receive | Status | Lead / Contact | Notes |
 |--------|------|---------|--------|----------------|-------|
-| **Sparrow** |  🆘 |  🆘 | 🆘 | Open | Needs indexer coordination |
+| **Sparrow** | ⚙️ | 🆘 | 🆘 | [craigraw](https://github.com/craigraw) | Evaluating |
 | **BitBox02** | ✅ | ❌ | ✅ Partial | ShiftCrypto | Send-only |
 | **Cake Wallet** | ✅ | ✅ | ✅ | Cake Team |  |
 | **BlueWallet** | ✅ | ❌ | ✅ Partial | Overtorment | Experimental branch |
-| **Bitcoin Core** | ⚙️ | ⛔ | ⛔ | @josibake / @eunovo | Blocked on libsecp256k1 |
-| **Dana wallet** | ✅ | ✅ | 🧪 | [cygnet](https://github.com/cygnet3) |  |
+| **Bitcoin Core** | 🧪 | 🧪 | ⛔ | @josibake / @eunovo | Blocked on libsecp256k1 |
+| **Dana wallet** | ✅ | ✅ | ✅ | [cygnet](https://github.com/cygnet3) |  |
 | **BlindBit** | ✅ | ✅ | 🧪 | [setavenger](https://github.com/setavenger) | Full Stack + Indexing |
+| **Electrum** | ✅ | ❌ | 🧪 | [MorenoProg](https://github.com/MorenoProg) | [PR #9900](https://github.com/spesmilo/electrum/pull/9900) |
 
 ---
 
@@ -48,9 +49,10 @@ This dashboard tracks the current state of development across the Silent Payment
 
 | Project | Description | Status | Lead | Links / Notes |
 |---------|-------------|--------|------|----------------|
-| **BlindBit Oracle** | Full-stack SP proof of concept | 🧪 | @setavenger | [Repo](https://github.com/setavenger/blindbit-oracle) |
-| **Electrs** | SP tweaks in Electrs | ⚙️ | @romanz| [PR 1075](https://github.com/romanz/electrs/pull/1075) |
-| **Cake's Esplora fork** | Heavy index, possible SP support | 🧪 | ? | [Cake fork](https://github.com/cake-tech/blockstream-electrs/tree/cake-update-v1) |
+| **BlindBit Oracle** | Full-stack SP Tweak Indexer | ✅ | @setavenger | [Repo](https://github.com/setavenger/blindbit-oracle) |
+| **Electrs** | SP tweaks in Electrs | 🧪 | @romanz| [PR 1075](https://github.com/romanz/electrs/pull/1075) |
+| **Cake's Esplora fork** | Electrum based SP Tweak Service | ✅ | ? | [Cake fork](https://github.com/cake-tech/blockstream-electrs/tree/cake-update-v1) |
+| **Bitcoin Index Server** | SP tweak consistency | 🧪 | @sjors | [PR #86](https://github.com/Sjors/bitcoin/pull/86) |
 
 ---
 
@@ -58,12 +60,16 @@ This dashboard tracks the current state of development across the Silent Payment
 
 | Topic | Description | Status | Lead / Contact | Notes |
 |-------|-------------|--------|----------------|-------|
+| **Indexing Server Spec** | Receiving Service Proposal | ⚙️ | @macgyver13 | [Server Spec](https://github.com/silent-payments/BIP0352-index-server-specification) |
 | **Light Client Protocol** | Fetch tweaks from server | 🧪 / 🆘 | @setavenger | [Delving Discussion](https://delvingbitcoin.org/t/silent-payments-light-client-protocol/891) |
 
 ---
 
 ### Testing & Evaluation
 
+#### Tools
+* [tweak service auditor](https://github.com/silent-payments/tweak-service-auditor)
+#### Setup Guides
 * [blindbit-oracle](testing/blindbit-oracle.md)
 * [bluewallet](testing/bluewallet.md)
 * [seedsigner](testing/seedsigner.md)
