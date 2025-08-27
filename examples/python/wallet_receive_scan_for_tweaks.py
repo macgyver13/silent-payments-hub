@@ -5,9 +5,11 @@ This script demonstrates silent payment wallet scanning algorithm
 following BIP-352 specification for educational purposes.
 """
 
+#TODO: add support for scanning when labels are used
+
 import hashlib
 from mnemonic import Mnemonic
-from bip32 import BIP32, HARDENED_INDEX
+from bip32 import BIP32
 from ecdsa import SECP256k1, VerifyingKey, SigningKey
 
 mnemo = Mnemonic("english")
@@ -36,27 +38,30 @@ def tagged_hash(tag, data):
     tag_hash = hashlib.sha256(tag.encode('utf-8')).digest()
     return hashlib.sha256(tag_hash + tag_hash + data).digest()
 
-def compute_ecdh_shared_secrets(input_public_keys, scan_private_key):
+def compute_ecdh_shared_secrets(tweaks, scan_private_key):
     """
-    BIP-352: Compute ECDH shared secrets between scan key and input public keys.
+    BIP-352: Compute ECDH shared secrets between scan key and tweak public keys.
     
-    For each input public key P_input in the transaction:
-    shared_secret = scan_private_key * P_input
+    For each tweak public key P_tweak in the block:
+    shared_secret = scan_private_key * P_tweak
     
     This is the core of silent payment detection - without the correct
     scan key, these shared secrets cannot be computed.
     """
+
+    print("\n######## Computed ECDH secrets")
+
     shared_secrets = []
-    for input_pubkey_hex in input_public_keys:
-        # Parse the input public key from the transaction
-        input_pubkey = VerifyingKey.from_string(bytes.fromhex(input_pubkey_hex), curve=SECP256k1)
+    for tweak in tweaks:
+        # Parse the tweak public key from the indexer service
+        tweak_pubkey = VerifyingKey.from_string(bytes.fromhex(tweak), curve=SECP256k1)
         
-        # Compute ECDH: shared_secret = scan_private_key * input_public_key  
-        shared_secret_point = scan_private_key.privkey.secret_multiplier * input_pubkey.pubkey.point
+        # Compute ECDH: shared_secret = scan_private_key * tweak_public_key  
+        shared_secret_point = scan_private_key.privkey.secret_multiplier * tweak_pubkey.pubkey.point
         
         # Serialize the shared secret for further processing
         shared_secret_bytes = VerifyingKey.from_public_point(shared_secret_point, curve=SECP256k1).to_string("compressed")
-        print("shared_secret:", shared_secret_bytes.hex())
+        print("shared secret:", shared_secret_bytes.hex())
         shared_secrets.append(shared_secret_bytes)
     
     return shared_secrets
@@ -73,20 +78,15 @@ def generate_candidate_output_key(shared_secret, spend_public_key, output_index)
     # Generate the output key tweak using BIP-352 tagged hash
     output_key_tweak = tagged_hash("BIP0352/SharedSecret", shared_secret + output_index.to_bytes(4, "big"))
     
-    # Calculate the expected output public key: spend_pubkey + tweak*G
+    # Calculate the expected output public key: spend_pubkey + tweak * G
     tweak_scalar = SigningKey.from_string(output_key_tweak, curve=SECP256k1)
     expected_output_point = spend_public_key.pubkey.point + tweak_scalar.privkey.secret_multiplier * SECP256k1.generator
     expected_output_pubkey = serialize_x_coordinate(expected_output_point)
     
     return {
-        'output_index': output_index,
         'output_pubkey': expected_output_pubkey,
         'output_key_tweak': output_key_tweak.hex()
     }
-
-# ================================================================================
-# BIP-352 Key Derivation 
-# ================================================================================
 
 # ================================================================================
 # BIP-352 Wallet Setup - Derive Silent Payment Keys
@@ -118,66 +118,69 @@ scan_private_key = SigningKey.from_string(scan_private_key_bytes, curve=SECP256k
 spend_public_key = VerifyingKey.from_string(spend_public_key_bytes, curve=SECP256k1)
 
 # ================================================================================
-# BIP-352 Input Data - Transaction Input Public Keys  
+# BIP-352 Input Data - A indexing service reduces wallet workload by computing
+# a partial shared secret minus the scan_key. By summing all input public keys
+# for the transaction, derive the input_hash and performing a tweak
+# Indexing service computes a tweak as follows:
+#   A = sum of public keys for transaction inputs
+#   input_hash = hashBIP0352/Inputs(outpointL || A)
+#   tweak = input_hash·A  
+#   *Note: bscan is missing from: ecdh_shared_secret = input_hash·bscan·A
 # ================================================================================
-
-# Input public keys from transactions (normally provided by indexer service)
-# These represent the sum of input public keys for each transaction
-input_public_keys_for_block = [
+tweaks_for_block = [
     "02f7904afe2add2d97ea03fce2c96fe495c0de63c7d3edc6bd91a33cd90805cd3c",
     "0228e0467cbfb382d39224e0188c08d61144dc596eb48a51f2190eb41ed1489acd",
-    "0228e0467cbfb382d39224e0188c08d611ccdc596eb48a51f2190eb41ed1489acd"
+    "0228e0467cbfb382d39224e0188c08d611ccdc596eb48a51f2190eb41ed1489acd",
+    "0377507bdbb89cc566a3b70d2e48960d9989cc27321b6f803c4a1a84c4f887c6a3"
 ]
 
-print("\n######## Computed ECDH secrets")
-
-# Step 1: Compute shared secrets with each transaction's input keys
-ecdh_shared_secrets = compute_ecdh_shared_secrets(input_public_keys_for_block, scan_private_key)
+# Step 1: Compute possible shared secret for a given transaction with 
+# scan_key and each tweak provided for a block
+ecdh_shared_secrets = compute_ecdh_shared_secrets(tweaks_for_block, scan_private_key)
 
 # ================================================================================
 # BIP-352 Simulated Data - Block Transactions with Outputs
-# Sample transaction outputs to scan (normally from blockchain data)
+# Sample transaction outputs to scan for silent payments (normally from blockchain data)
+# Each output represents a potential silent payment to detect
 # ================================================================================
 block_transactions = [
     {
         'txid': 'abc123',
         'outputs': [
             {
-                'vout': 0,
                 'scriptPubKey': bytes.fromhex("5120690daead18e35f65625f69c147e79584c36d2e3790a25cb4ab734ab19bf7097d"),
                 'value': 50000
             },
             {
-                'vout': 2,
                 'scriptPubKey': bytes.fromhex("512001ee984af98ade273fdd4546c143f684ef57e3cb57cf5b5acd9f21c30d150e00"),
                 'value': 97690067
             }
-        ]
+        ],
+        'inputs' : []
     },
     {
         'txid': 'xyz321',
         'outputs': [
             {
-                'vout': 0,
                 'scriptPubKey': bytes.fromhex("51200000000000000000000000000000000000000000000000000000000000000000"),
                 'value': 100
             },
             {
-                'vout': 1,
                 'scriptPubKey': bytes.fromhex("51205e6c6909d0704ffead26c869ebd8d4589fec1b1aa01e0bee0d5fe740a85e531d"),
                 'value': 4000
             }
-        ]
+        ],
+        'inputs' : []
     },
     {
         'txid': 'no match',
         'outputs': [
             {
-                'vout': 0,
                 'scriptPubKey': bytes.fromhex("51200000000000000000000000000000000000000000000000000000000000000000"),
                 'value': 100
             }
-        ]
+        ],
+        'inputs' : []
     }
 ]
 
@@ -186,21 +189,20 @@ block_transactions = [
 # ================================================================================
 print("\n######## Scan Transactions")
 
-# Step 2: For each shared secret and transaction, generate candidate keys for actual output positions
+# Step 2: For each shared secret and transaction, generate candidate script pub keys for actual output
 matched_utxos = []
 
 for tx in block_transactions:
     print(f"Process txn: {tx["txid"]}")
     for shared_secret in ecdh_shared_secrets:
         # Generate candidate keys based on actual number of outputs in this transaction
-        for output_index, output in enumerate(tx['outputs']):
-            # Generate the candidate key for this specific output position
-            candidate_key = generate_candidate_output_key(shared_secret, spend_public_key, output_index)
-            expected_output_pubkey = candidate_key['output_pubkey']
-            # print(f"Checking output {output_index}: expected={expected_output_pubkey.hex()}")
+        for output_index, output_data in enumerate(tx['outputs']):
+            # Generate the candidate key for this specific output position (BIP-352 k value)
+            candidate_key_data = generate_candidate_output_key(shared_secret, spend_public_key, output_index)
+            expected_output_pubkey = candidate_key_data['output_pubkey']
             
-            # Check if this output matches our expected silent payment
-            script_pubkey = output['scriptPubKey']
+            # Check if this output's scriptPubKey matches our expected silent payment
+            script_pubkey = output_data['scriptPubKey']
             if len(script_pubkey) == 34 and script_pubkey[0:2] == bytes.fromhex("5120"):
                 # Extract x-coordinate from taproot scriptPubKey (OP_1 + 32 bytes)
                 actual_output_pubkey = script_pubkey[2:34]
@@ -209,13 +211,11 @@ for tx in block_transactions:
                     print(f" Found match! actual scriptPubKey: {actual_output_pubkey.hex()}")
                     matched_utxos.append({
                         'txid': tx['txid'],
-                        'vout': output['vout'],
-                        'value': output['value'],
-                        'output_key_tweak': candidate_key['output_key_tweak'],
-                        'output_pub_key': candidate_key['output_pubkey'],
-                        'output_index': candidate_key['output_index']
+                        'vout': output_index,
+                        'value': output_data['value'],
+                        'scriptPubKey': output_data['scriptPubKey'],
+                        'sp_tweak': candidate_key_data['output_key_tweak']
                     })
-                    # break
 
 # ================================================================================
 # BIP-352 Results - Display Detected Silent Payments
@@ -225,6 +225,6 @@ print("\n######## Matched UTXOs")
 # Display any silent payments detected for this wallet
 if matched_utxos:
     for utxo in matched_utxos:
-        print(f"Matched UTXO: txid={utxo['txid']}, vout={utxo['vout']}, value={utxo['value']}, tweak={utxo['output_key_tweak']}, output_key={utxo['output_pub_key'].hex()}")
+        print(f"Matched UTXO: txid={utxo['txid']}, vout={utxo['vout']}, value={utxo['value']}, tweak={utxo['sp_tweak']}, script={utxo['scriptPubKey'].hex()}")
 else:
     print("No matching UTXOs found")

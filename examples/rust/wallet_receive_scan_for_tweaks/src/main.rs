@@ -3,6 +3,8 @@
 //! This program demonstrates silent payment wallet scanning algorithm
 //! following BIP-352 specification for educational purposes.
 
+//TODO: add support for scanning when labels are used
+
 use std::str::FromStr;
 use bitcoin::secp256k1::{Secp256k1, SecretKey, PublicKey, Scalar};
 use bitcoin::bip32::{Xpriv, DerivationPath};
@@ -46,24 +48,26 @@ mod bip352 {
     /// This is the core of silent payment detection - without the correct
     /// scan key, these shared secrets cannot be computed.
     pub fn compute_ecdh_shared_secrets(
-        input_public_keys: &[&str],
+        tweaks: &[&str],
         scan_private_key: &SecretKey,
         secp: &Secp256k1<bitcoin::secp256k1::All>
     ) -> Vec<[u8; 33]> {
         let mut shared_secrets = Vec::new();
+
+        println!("\n######## Computed ECDH secrets");
         
-        for input_pubkey_hex in input_public_keys {
+        for tweak in tweaks {
             // Parse the input public key from the transaction
-            let input_pubkey = PublicKey::from_str(input_pubkey_hex)
+            let tweak_pubkey = PublicKey::from_str(tweak)
                 .expect("Invalid public key format");
             
             // Compute ECDH: shared_secret = scan_private_key * input_public_key
-            let shared_secret_point = input_pubkey.mul_tweak(secp, &Scalar::from(*scan_private_key))
+            let shared_secret_point = tweak_pubkey.mul_tweak(secp, &Scalar::from(*scan_private_key))
                 .expect("ECDH computation failed");
             
             // Serialize the shared secret for further processing
             let shared_secret_bytes = shared_secret_point.serialize();
-            println!("shared_secret: {}", hex::encode(shared_secret_bytes));
+            println!("shared secret: {}", hex::encode(shared_secret_bytes));
             shared_secrets.push(shared_secret_bytes);
         }
         
@@ -97,14 +101,12 @@ mod bip352 {
         let expected_output_pubkey = serialize_x_coordinate(&expected_output_point);
         
         CandidateKey {
-            output_index,
             output_pubkey: expected_output_pubkey,
             output_key_tweak: hex::encode(output_key_tweak),
         }
     }
 
     pub struct CandidateKey {
-        pub output_index: u32,
         pub output_pubkey: [u8; 32],
         pub output_key_tweak: String,
     }
@@ -113,7 +115,6 @@ mod bip352 {
 /// Transaction output structure for scanning
 #[derive(Debug)]
 struct TransactionOutput {
-    vout: u32,
     script_pubkey: Vec<u8>,
     value: u64,
 }
@@ -123,6 +124,7 @@ struct TransactionOutput {
 struct Transaction {
     txid: String,
     outputs: Vec<TransactionOutput>,
+    inputs: Vec<u8>
 }
 
 /// Matched UTXO result
@@ -131,9 +133,8 @@ struct MatchedUtxo {
     txid: String,
     vout: u32,
     value: u64,
-    output_key_tweak: String,
-    output_pub_key: String,
-    output_index: u32,
+    sp_tweak: String,
+    script_pub_key: String,
 }
 
 fn main() {
@@ -173,69 +174,75 @@ fn main() {
     let spend_public_key = PublicKey::from_secret_key(&secp, &spend_private_key);
     println!("spend pub: {}", hex::encode(spend_public_key.serialize()));
     
-    // Input public keys from transactions (normally provided by indexer service)
-    // These represent the sum of input public keys for each transaction
-    let input_public_keys_for_block = vec![
+    // ================================================================================
+    // BIP-352 Input Data - A indexing service reduces wallet workload by computing
+    // a partial shared secret minus the scan_key. By summing all input public keys
+    // for the transaction, derive the input_hash and performing a tweak
+    // Indexing service computes a tweak as follows:
+    //   A = sum of public keys for transaction inputs
+    //   input_hash = hashBIP0352/Inputs(outpointL || A)
+    //   tweak = input_hash·A  
+    //   *Note: bscan is missing from: ecdh_shared_secret = input_hash·bscan·A
+    // ================================================================================
+    let tweaks_for_block = vec![
         "02f7904afe2add2d97ea03fce2c96fe495c0de63c7d3edc6bd91a33cd90805cd3c",
         "0228e0467cbfb382d39224e0188c08d61144dc596eb48a51f2190eb41ed1489acd",
-        "0228e0467cbfb382d39224e0188c08d611ccdc596eb48a51f2190eb41ed1489acd"
+        "0228e0467cbfb382d39224e0188c08d611ccdc596eb48a51f2190eb41ed1489acd",
+        "0377507bdbb89cc566a3b70d2e48960d9989cc27321b6f803c4a1a84c4f887c6a3"
     ];
-    
-    println!("\n######## Computed ECDH secrets");
     
     // Step 1: Compute shared secrets with each transaction's input keys
     let ecdh_shared_secrets = bip352::compute_ecdh_shared_secrets(
-        &input_public_keys_for_block,
+        &tweaks_for_block,
         &scan_private_key,
         &secp
     );
     
-    // Sample transaction outputs to scan (normally from blockchain data)
+    // Sample transaction outputs to scan for silent payments (normally from blockchain data)
+    // Each output represents a potential silent payment to detect
     let block_transactions = vec![
         Transaction {
             txid: "abc123".to_string(),
             outputs: vec![
                 TransactionOutput {
-                    vout: 0,
                     script_pubkey: hex::decode("5120690daead18e35f65625f69c147e79584c36d2e3790a25cb4ab734ab19bf7097d")
                         .expect("Invalid hex"),
                     value: 50000,
                 },
                 TransactionOutput {
-                    vout: 2,
                     script_pubkey: hex::decode("512001ee984af98ade273fdd4546c143f684ef57e3cb57cf5b5acd9f21c30d150e00")
                         .expect("Invalid hex"),
                     value: 97690067,
                 },
             ],
+            inputs: vec![]
         },
         Transaction {
             txid: "xyz321".to_string(),
             outputs: vec![
                 TransactionOutput {
-                    vout: 0,
                     script_pubkey: hex::decode("51200000000000000000000000000000000000000000000000000000000000000000")
                         .expect("Invalid hex"),
                     value: 100,
                 },
                 TransactionOutput {
-                    vout: 1,
                     script_pubkey: hex::decode("51205e6c6909d0704ffead26c869ebd8d4589fec1b1aa01e0bee0d5fe740a85e531d")
                         .expect("Invalid hex"),
                     value: 4000,
                 },
             ],
+            inputs: vec![]
         },
         Transaction {
             txid: "no match".to_string(),
             outputs: vec![
                 TransactionOutput {
-                    vout: 0,
                     script_pubkey: hex::decode("51200000000000000000000000000000000000000000000000000000000000000000")
                         .expect("Invalid hex"),
                     value: 100,
                 },
             ],
+            inputs: vec![]
         },
     ];
     
@@ -249,7 +256,7 @@ fn main() {
         for shared_secret in &ecdh_shared_secrets {
             // Generate candidate keys based on actual number of outputs in this transaction
             for (output_index, output) in tx.outputs.iter().enumerate() {
-                // Generate the candidate key for this specific output position
+                // Generate the candidate key for this specific output position (BIP-352 k value)
                 let candidate_key = bip352::generate_candidate_output_key(
                     shared_secret,
                     &spend_public_key,
@@ -258,7 +265,7 @@ fn main() {
                 );
                 let expected_output_pubkey = candidate_key.output_pubkey;
                 
-                // Check if this output matches our expected silent payment
+                // Check if this output's scriptPubKey matches our expected silent payment
                 let script_pubkey = &output.script_pubkey;
                 if script_pubkey.len() == 34 && script_pubkey[0..2] == [0x51, 0x20] {
                     // Extract x-coordinate from taproot scriptPubKey (OP_1 + 32 bytes)
@@ -269,11 +276,10 @@ fn main() {
                         println!(" Found match! actual scriptPubKey: {}", hex::encode(actual_output_pubkey));
                         matched_utxos.push(MatchedUtxo {
                             txid: tx.txid.clone(),
-                            vout: output.vout,
+                            vout: output_index as u32,
                             value: output.value,
-                            output_key_tweak: candidate_key.output_key_tweak,
-                            output_pub_key: hex::encode(candidate_key.output_pubkey),
-                            output_index: candidate_key.output_index,
+                            sp_tweak: candidate_key.output_key_tweak,
+                            script_pub_key: hex::encode(candidate_key.output_pubkey),
                         });
                     }
                 }
@@ -285,8 +291,8 @@ fn main() {
     // Display any silent payments detected for this wallet
     if !matched_utxos.is_empty() {
         for utxo in &matched_utxos {
-            println!("Matched UTXO: txid={}, vout={}, value={}, tweak={}, output_key={}", 
-                utxo.txid, utxo.vout, utxo.value, utxo.output_key_tweak, utxo.output_pub_key);
+            println!("Matched UTXO: txid={}, vout={}, value={}, tweak={}, script={}", 
+                utxo.txid, utxo.vout, utxo.value, utxo.sp_tweak, utxo.script_pub_key);
         }
     } else {
         println!("No matching UTXOs found");
