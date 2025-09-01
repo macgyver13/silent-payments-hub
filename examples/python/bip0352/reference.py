@@ -116,7 +116,7 @@ def decode_silent_payment_address(address: str, hrp: str = "tsp") -> Tuple[ECPub
     return B_scan, B_spend
 
 
-def create_outputs(input_priv_keys: List[Tuple[ECKey, bool]], outpoints: List[COutPoint], recipients: List[str], hrp="tsp") -> List[str]:
+def create_outputs(input_priv_keys: List[Tuple[ECKey, bool]], outpoints: List[COutPoint], recipients: List[str], expected: Dict[str, any] = None, hrp="tsp") -> List[str]:
     G = ECKey().set(1).get_pubkey()
     negated_keys = []
     for key, is_xonly in input_priv_keys:
@@ -129,10 +129,17 @@ def create_outputs(input_priv_keys: List[Tuple[ECKey, bool]], outpoints: List[CO
     if not a_sum.valid:
         # Input privkeys sum is zero -> fail
         return []
+    assert ECKey().set(bytes.fromhex(expected.get("input_private_key_sum"))) == a_sum, "private key sum does not match expected"
+
     input_hash = get_input_hash(outpoints, a_sum * G)
     silent_payment_groups: Dict[ECPubKey, List[ECPubKey]] = {}
     for recipient in recipients:
-        B_scan, B_m = decode_silent_payment_address(recipient, hrp=hrp)
+        B_scan, B_m = decode_silent_payment_address(recipient["address"], hrp=hrp)
+        # Use pre-decoded keys from recipient object
+        expected_B_scan = ECPubKey().set(bytes.fromhex(recipient["scan_pub_key"]))
+        expected_B_m = ECPubKey().set(bytes.fromhex(recipient["spend_pub_key"]))
+        assert expected_B_scan == B_scan, "expected scan address does not match decoded scan address"
+        assert expected_B_m == B_m, "expected spend address does not match decoded spend address"
         if B_scan in silent_payment_groups:
             silent_payment_groups[B_scan].append(B_m)
         else:
@@ -141,6 +148,21 @@ def create_outputs(input_priv_keys: List[Tuple[ECKey, bool]], outpoints: List[CO
     outputs = []
     for B_scan, B_m_values in silent_payment_groups.items():
         ecdh_shared_secret = input_hash * a_sum * B_scan
+        
+        # Validate computed shared secret against reference (if provided)
+        expected_shared_secrets = expected.get("shared_secrets", {})
+        if expected_shared_secrets:
+            assert len(expected_shared_secrets) == len(recipients), f"Expected {len(recipients)} shared secrets, got {len(expected_shared_secrets)}"
+            
+            # Find the recipient address that corresponds to this B_scan and get its index
+            for recipient_idx, recipient in enumerate(recipients):
+                recipient_B_scan = ECPubKey().set(bytes.fromhex(recipient["scan_pub_key"]))
+                if recipient_B_scan == B_scan:
+                    computed_shared_secret_hex = ecdh_shared_secret.get_bytes(False).hex()
+                    expected_shared_secret_hex = expected_shared_secrets[recipient_idx]
+                    assert computed_shared_secret_hex == expected_shared_secret_hex, f"Shared secret validation failed for recipient {recipient_idx} ({recipient['address']}): computed={computed_shared_secret_hex}, expected={expected_shared_secret_hex}"
+                    break
+
         k = 0
         for B_m in B_m_values:
             t_k = TaggedHash("BIP0352/SharedSecret", ecdh_shared_secret.get_bytes(False) + ser_uint32(k))
@@ -151,9 +173,25 @@ def create_outputs(input_priv_keys: List[Tuple[ECKey, bool]], outpoints: List[CO
     return list(set(outputs))
 
 
-def scanning(b_scan: ECKey, B_spend: ECPubKey, A_sum: ECPubKey, input_hash: bytes, outputs_to_check: List[ECPubKey], labels: Dict[str, str] = {}) -> List[Dict[str, str]]:
+def scanning(b_scan: ECKey, B_spend: ECPubKey, A_sum: ECPubKey, input_hash: bytes, outputs_to_check: List[ECPubKey], labels: Dict[str, str] = {}, expected: Dict[str,any] = None) -> List[Dict[str, str]]:
     G = ECKey().set(1).get_pubkey()
+    
+    # Validate computed tweak against reference (if provided)
+    expected_tweak = expected.get("tweak")
+    if expected_tweak:
+        input_hash_key = ECKey().set(input_hash)
+        computed_tweak_point = input_hash_key * A_sum
+        computed_tweak_hex = computed_tweak_point.get_bytes(False).hex()
+        assert computed_tweak_hex == expected_tweak, f"Tweak validation failed: computed={computed_tweak_hex}, expected={expected_tweak}"
+    
     ecdh_shared_secret = input_hash * b_scan * A_sum
+    
+    # Validate computed shared secret against reference (if provided)
+    expected_shared_secret = expected.get("shared_secret")
+    if expected_shared_secret:
+        computed_shared_secret_hex = ecdh_shared_secret.get_bytes(False).hex()
+        assert computed_shared_secret_hex == expected_shared_secret, f"Shared secret validation failed: computed={computed_shared_secret_hex}, expected={expected_shared_secret}"
+    
     k = 0
     wallet = []
     while True:
@@ -240,7 +278,7 @@ if __name__ == "__main__":
             sending_outputs = []
             if (len(input_pub_keys) > 0):
                 outpoints = [vin.outpoint for vin in vins]
-                sending_outputs = create_outputs(input_priv_keys, outpoints, given["recipients"], hrp="sp")
+                sending_outputs = create_outputs(input_priv_keys, outpoints, given["recipients"], expected=expected, hrp="sp")
 
                 # Note: order doesn't matter for creating/finding the outputs. However, different orderings of the recipient addresses
                 # will produce different generated outputs if sending to multiple silent payment addresses belonging to the
@@ -299,6 +337,13 @@ if __name__ == "__main__":
             add_to_wallet = []
             if (len(input_pub_keys) > 0):
                 A_sum = reduce(lambda x, y: x + y, input_pub_keys)
+                
+                # Validate computed public key sum against expected value (if provided)
+                expected_pub_key_sum = expected.get("input_pub_key_sum")
+                if expected_pub_key_sum:
+                    computed_pub_key_sum_hex = A_sum.get_bytes(False).hex()
+                    assert computed_pub_key_sum_hex == expected_pub_key_sum, f"Public key sum validation failed: computed={computed_pub_key_sum_hex}, expected={expected_pub_key_sum}"
+                
                 if A_sum.get_bytes() is None:
                     # Input pubkeys sum is point at infinity -> skip tx
                     assert expected["outputs"] == []
@@ -315,6 +360,7 @@ if __name__ == "__main__":
                     input_hash=input_hash,
                     outputs_to_check=outputs_to_check,
                     labels=pre_computed_labels,
+                    expected=expected,
                 )
 
             # Check that the private key is correct for the found output public key
