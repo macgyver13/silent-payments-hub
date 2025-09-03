@@ -275,6 +275,12 @@ if __name__ == "__main__":
                 ))
                 input_pub_keys.append(pubkey)
 
+            # Validate computed input public keys against expected values (if provided)
+            expected_pub_keys = expected.get("input_pub_keys")
+            if expected_pub_keys is not None:
+                computed_pub_keys_hex = [pk.get_bytes(False).hex() for pk in input_pub_keys]
+                assert computed_pub_keys_hex == expected_pub_keys, f"Input public keys validation failed: computed={computed_pub_keys_hex}, expected={expected_pub_keys}"
+
             sending_outputs = []
             if (len(input_pub_keys) > 0):
                 outpoints = [vin.outpoint for vin in vins]

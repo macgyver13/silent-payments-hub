@@ -47,7 +47,11 @@
                     "shared_secrets": [
                         "028158aff7d61ea66b2fa7f555bc3c5937d1debbde16423d630f9aa7943e14d80d"
                     ],
-                    "input_private_key_sum": "7ed265a6dac7aba8508a32d6d6b84c7f1dbd0a0941dd01088d69e8d556345f86"
+                    "input_private_key_sum": "7ed265a6dac7aba8508a32d6d6b84c7f1dbd0a0941dd01088d69e8d556345f86",
+                    "input_pub_keys": [
+                        "025a1e61f898173040e20616d43e9f496fba90338a39faa1ed98fcbaeee4dd9be5",
+                        "03bd85685d03d111699b15d046319febe77f8de5286e9e512703cdee1bf3be3792"
+                    ]
                 }
             }
         ],
@@ -153,7 +157,11 @@
                     "shared_secrets": [
                         "028158aff7d61ea66b2fa7f555bc3c5937d1debbde16423d630f9aa7943e14d80d"
                     ],
-                    "input_private_key_sum": "7ed265a6dac7aba8508a32d6d6b84c7f1dbd0a0941dd01088d69e8d556345f86"
+                    "input_private_key_sum": "7ed265a6dac7aba8508a32d6d6b84c7f1dbd0a0941dd01088d69e8d556345f86",
+                    "input_pub_keys": [
+                        "025a1e61f898173040e20616d43e9f496fba90338a39faa1ed98fcbaeee4dd9be5",
+                        "03bd85685d03d111699b15d046319febe77f8de5286e9e512703cdee1bf3be3792"
+                    ]
                 }
             }
         ],
@@ -259,7 +267,11 @@
                     "shared_secrets": [
                         "03aa707f7b5e94b448abd28aa217e3d7a7cc6bb07f1a8d07be4de91bf7b1417469"
                     ],
-                    "input_private_key_sum": "7ed265a6dac7aba8508a32d6d6b84c7f1dbd0a0941dd01088d69e8d556345f86"
+                    "input_private_key_sum": "7ed265a6dac7aba8508a32d6d6b84c7f1dbd0a0941dd01088d69e8d556345f86",
+                    "input_pub_keys": [
+                        "025a1e61f898173040e20616d43e9f496fba90338a39faa1ed98fcbaeee4dd9be5",
+                        "03bd85685d03d111699b15d046319febe77f8de5286e9e512703cdee1bf3be3792"
+                    ]
                 }
             }
         ],
@@ -365,7 +377,11 @@
                     "shared_secrets": [
                         "03054f5c84b07182ba2a2e10a35e088778f95c04f059f4574b024c372eb8ce5468"
                     ],
-                    "input_private_key_sum": "7ed265a6dac7aba8508a32d6d6b84c7f1dbd0a0941dd01088d69e8d556345f86"
+                    "input_private_key_sum": "7ed265a6dac7aba8508a32d6d6b84c7f1dbd0a0941dd01088d69e8d556345f86",
+                    "input_pub_keys": [
+                        "025a1e61f898173040e20616d43e9f496fba90338a39faa1ed98fcbaeee4dd9be5",
+                        "03bd85685d03d111699b15d046319febe77f8de5286e9e512703cdee1bf3be3792"
+                    ]
                 }
             }
         ],
@@ -471,7 +487,11 @@
                     "shared_secrets": [
                         "02cb25a6e7c9b7c6d550e0413da63834678465b5e80853a51d0335d318296ac182"
                     ],
-                    "input_private_key_sum": "7ed265a6dac7aba8508a32d6d6b84c7f1dbd0a0941dd01088d69e8d556345f86"
+                    "input_private_key_sum": "7ed265a6dac7aba8508a32d6d6b84c7f1dbd0a0941dd01088d69e8d556345f86",
+                    "input_pub_keys": [
+                        "025a1e61f898173040e20616d43e9f496fba90338a39faa1ed98fcbaeee4dd9be5",
+                        "03bd85685d03d111699b15d046319febe77f8de5286e9e512703cdee1bf3be3792"
+                    ]
                 }
             }
         ],
@@ -577,7 +597,11 @@
                     "shared_secrets": [
                         "02f6b40ff17f4010fe732ac4b0f2f211281aa09c9a5fb41f1c151ec2606fee9ec2"
                     ],
-                    "input_private_key_sum": "d5b8f02cbfe3f1d5295af9fb8a9320e859e9cb07115856486ab1a4e4fb89a621"
+                    "input_private_key_sum": "d5b8f02cbfe3f1d5295af9fb8a9320e859e9cb07115856486ab1a4e4fb89a621",
+                    "input_pub_keys": [
+                        "025a1e61f898173040e20616d43e9f496fba90338a39faa1ed98fcbaeee4dd9be5",
+                        "025a1e61f898173040e20616d43e9f496fba90338a39faa1ed98fcbaeee4dd9be5"
+                    ]
                 }
             }
         ],
@@ -683,7 +707,11 @@
                     "shared_secrets": [
                         "02de9719785c6d09f71571dadf44bca59edba2af3e689c65cbc3bb5a4a387732ef"
                     ],
-                    "input_private_key_sum": "e7638ebfda3ab3849a5707e240a6627671f7f6e609bf172691cf1e9780e51d47"
+                    "input_private_key_sum": "e7638ebfda3ab3849a5707e240a6627671f7f6e609bf172691cf1e9780e51d47",
+                    "input_pub_keys": [
+                        "025a1e61f898173040e20616d43e9f496fba90338a39faa1ed98fcbaeee4dd9be5",
+                        "02782eeb913431ca6e9b8c2fd80a5f72ed2024ef72a3c6fb10263c379937323338"
+                    ]
                 }
             }
         ],
@@ -789,7 +817,11 @@
                     "shared_secrets": [
                         "030e7f5ca4bf109fc35c8c2d878f756c891ac04c456cc5f0b05fcec4d3b2b1beb2"
                     ],
-                    "input_private_key_sum": "cda4ff9a3480e1fbfc6edd61b222f280f9baa0652002c1ffdb612efcc45d2ff2"
+                    "input_private_key_sum": "cda4ff9a3480e1fbfc6edd61b222f280f9baa0652002c1ffdb612efcc45d2ff2",
+                    "input_pub_keys": [
+                        "025a1e61f898173040e20616d43e9f496fba90338a39faa1ed98fcbaeee4dd9be5",
+                        "028c8d23d4764feffcd5e72e380802540fa0f88e3d62ad5e0b47955f74d7b283c4"
+                    ]
                 }
             }
         ],
@@ -895,7 +927,11 @@
                     "shared_secrets": [
                         "021cd92ff153e638d0a97bcd11fafc81c321b111f5ba1efff593371b7b688efdd3"
                     ],
-                    "input_private_key_sum": "7823ca0d4895515315a8e3bf602c080b6b732117272429e94751eb9b13a01943"
+                    "input_private_key_sum": "7823ca0d4895515315a8e3bf602c080b6b732117272429e94751eb9b13a01943",
+                    "input_pub_keys": [
+                        "025a1e61f898173040e20616d43e9f496fba90338a39faa1ed98fcbaeee4dd9be5",
+                        "03e0ec4f64b3fa2e463ccfcf4e856e37d5e1e20275bc89ec1def9eb098eff1f85d"
+                    ]
                 }
             }
         ],
@@ -1001,7 +1037,11 @@
                     "shared_secrets": [
                         "03d9437eb3676cf5cc00feebe68bc44c4567332e4b89788dec9eceb3779054442b"
                     ],
-                    "input_private_key_sum": "700fd97abd324179e8bcc72587bbd9a40b43f67535ce95a0b80175b2dc73a314"
+                    "input_private_key_sum": "700fd97abd324179e8bcc72587bbd9a40b43f67535ce95a0b80175b2dc73a314",
+                    "input_pub_keys": [
+                        "028c8d23d4764feffcd5e72e380802540fa0f88e3d62ad5e0b47955f74d7b283c4",
+                        "03e0ec4f64b3fa2e463ccfcf4e856e37d5e1e20275bc89ec1def9eb098eff1f85d"
+                    ]
                 }
             }
         ],
@@ -1114,7 +1154,11 @@
                         "038efbcbc1b0938fba3bf59fea1219a3c54b6d6f9107560da05001407adc13f413",
                         "038efbcbc1b0938fba3bf59fea1219a3c54b6d6f9107560da05001407adc13f413"
                     ],
-                    "input_private_key_sum": "ee55616ce5a93e508f03f21949ecbe70a2a0b107b6e1df5d98b4e4da4adaca1b"
+                    "input_private_key_sum": "ee55616ce5a93e508f03f21949ecbe70a2a0b107b6e1df5d98b4e4da4adaca1b",
+                    "input_pub_keys": [
+                        "025a1e61f898173040e20616d43e9f496fba90338a39faa1ed98fcbaeee4dd9be5",
+                        "03782eeb913431ca6e9b8c2fd80a5f72ed2024ef72a3c6fb10263c379937323338"
+                    ]
                 }
             }
         ],
@@ -1240,7 +1284,11 @@
                         "03dd5fd04d3c8863be750a1bd7474df06161461d38d3ce1397a5c78cee112cdcd2",
                         "03dd5fd04d3c8863be750a1bd7474df06161461d38d3ce1397a5c78cee112cdcd2"
                     ],
-                    "input_private_key_sum": "ee55616ce5a93e508f03f21949ecbe70a2a0b107b6e1df5d98b4e4da4adaca1b"
+                    "input_private_key_sum": "ee55616ce5a93e508f03f21949ecbe70a2a0b107b6e1df5d98b4e4da4adaca1b",
+                    "input_pub_keys": [
+                        "025a1e61f898173040e20616d43e9f496fba90338a39faa1ed98fcbaeee4dd9be5",
+                        "03782eeb913431ca6e9b8c2fd80a5f72ed2024ef72a3c6fb10263c379937323338"
+                    ]
                 }
             }
         ],
@@ -1353,7 +1401,11 @@
                     "shared_secrets": [
                         "038efbcbc1b0938fba3bf59fea1219a3c54b6d6f9107560da05001407adc13f413"
                     ],
-                    "input_private_key_sum": "ee55616ce5a93e508f03f21949ecbe70a2a0b107b6e1df5d98b4e4da4adaca1b"
+                    "input_private_key_sum": "ee55616ce5a93e508f03f21949ecbe70a2a0b107b6e1df5d98b4e4da4adaca1b",
+                    "input_pub_keys": [
+                        "025a1e61f898173040e20616d43e9f496fba90338a39faa1ed98fcbaeee4dd9be5",
+                        "03782eeb913431ca6e9b8c2fd80a5f72ed2024ef72a3c6fb10263c379937323338"
+                    ]
                 }
             }
         ],
@@ -1466,7 +1518,11 @@
                     "shared_secrets": [
                         "038efbcbc1b0938fba3bf59fea1219a3c54b6d6f9107560da05001407adc13f413"
                     ],
-                    "input_private_key_sum": "ee55616ce5a93e508f03f21949ecbe70a2a0b107b6e1df5d98b4e4da4adaca1b"
+                    "input_private_key_sum": "ee55616ce5a93e508f03f21949ecbe70a2a0b107b6e1df5d98b4e4da4adaca1b",
+                    "input_pub_keys": [
+                        "025a1e61f898173040e20616d43e9f496fba90338a39faa1ed98fcbaeee4dd9be5",
+                        "03782eeb913431ca6e9b8c2fd80a5f72ed2024ef72a3c6fb10263c379937323338"
+                    ]
                 }
             }
         ],
@@ -1579,7 +1635,11 @@
                     "shared_secrets": [
                         "038efbcbc1b0938fba3bf59fea1219a3c54b6d6f9107560da05001407adc13f413"
                     ],
-                    "input_private_key_sum": "ee55616ce5a93e508f03f21949ecbe70a2a0b107b6e1df5d98b4e4da4adaca1b"
+                    "input_private_key_sum": "ee55616ce5a93e508f03f21949ecbe70a2a0b107b6e1df5d98b4e4da4adaca1b",
+                    "input_pub_keys": [
+                        "025a1e61f898173040e20616d43e9f496fba90338a39faa1ed98fcbaeee4dd9be5",
+                        "03782eeb913431ca6e9b8c2fd80a5f72ed2024ef72a3c6fb10263c379937323338"
+                    ]
                 }
             }
         ],
@@ -1703,7 +1763,11 @@
                         "038efbcbc1b0938fba3bf59fea1219a3c54b6d6f9107560da05001407adc13f413",
                         "038efbcbc1b0938fba3bf59fea1219a3c54b6d6f9107560da05001407adc13f413"
                     ],
-                    "input_private_key_sum": "ee55616ce5a93e508f03f21949ecbe70a2a0b107b6e1df5d98b4e4da4adaca1b"
+                    "input_private_key_sum": "ee55616ce5a93e508f03f21949ecbe70a2a0b107b6e1df5d98b4e4da4adaca1b",
+                    "input_pub_keys": [
+                        "025a1e61f898173040e20616d43e9f496fba90338a39faa1ed98fcbaeee4dd9be5",
+                        "03782eeb913431ca6e9b8c2fd80a5f72ed2024ef72a3c6fb10263c379937323338"
+                    ]
                 }
             }
         ],
@@ -1825,7 +1889,11 @@
                         "038efbcbc1b0938fba3bf59fea1219a3c54b6d6f9107560da05001407adc13f413",
                         "038efbcbc1b0938fba3bf59fea1219a3c54b6d6f9107560da05001407adc13f413"
                     ],
-                    "input_private_key_sum": "ee55616ce5a93e508f03f21949ecbe70a2a0b107b6e1df5d98b4e4da4adaca1b"
+                    "input_private_key_sum": "ee55616ce5a93e508f03f21949ecbe70a2a0b107b6e1df5d98b4e4da4adaca1b",
+                    "input_pub_keys": [
+                        "025a1e61f898173040e20616d43e9f496fba90338a39faa1ed98fcbaeee4dd9be5",
+                        "03782eeb913431ca6e9b8c2fd80a5f72ed2024ef72a3c6fb10263c379937323338"
+                    ]
                 }
             }
         ],
@@ -2027,7 +2095,11 @@
                         "038efbcbc1b0938fba3bf59fea1219a3c54b6d6f9107560da05001407adc13f413",
                         "038efbcbc1b0938fba3bf59fea1219a3c54b6d6f9107560da05001407adc13f413"
                     ],
-                    "input_private_key_sum": "ee55616ce5a93e508f03f21949ecbe70a2a0b107b6e1df5d98b4e4da4adaca1b"
+                    "input_private_key_sum": "ee55616ce5a93e508f03f21949ecbe70a2a0b107b6e1df5d98b4e4da4adaca1b",
+                    "input_pub_keys": [
+                        "025a1e61f898173040e20616d43e9f496fba90338a39faa1ed98fcbaeee4dd9be5",
+                        "03782eeb913431ca6e9b8c2fd80a5f72ed2024ef72a3c6fb10263c379937323338"
+                    ]
                 }
             }
         ],
@@ -2163,7 +2235,11 @@
                         "038efbcbc1b0938fba3bf59fea1219a3c54b6d6f9107560da05001407adc13f413",
                         "037d12c02c3aed482658a28b8d1be030dac1daf995551491d74c00543af98572fb"
                     ],
-                    "input_private_key_sum": "ee55616ce5a93e508f03f21949ecbe70a2a0b107b6e1df5d98b4e4da4adaca1b"
+                    "input_private_key_sum": "ee55616ce5a93e508f03f21949ecbe70a2a0b107b6e1df5d98b4e4da4adaca1b",
+                    "input_pub_keys": [
+                        "025a1e61f898173040e20616d43e9f496fba90338a39faa1ed98fcbaeee4dd9be5",
+                        "03782eeb913431ca6e9b8c2fd80a5f72ed2024ef72a3c6fb10263c379937323338"
+                    ]
                 }
             }
         ],
@@ -2337,7 +2413,10 @@
                     "shared_secrets": [
                         "036f040608cd1e5ee79c54e78bea85904c895591f547beae080d0c5f6946c2730d"
                     ],
-                    "input_private_key_sum": "fc8716a97a48ba9a05a98ae47b5cd201a25a7fd5d8b73c203c5f7b6b6b3b6ad7"
+                    "input_private_key_sum": "fc8716a97a48ba9a05a98ae47b5cd201a25a7fd5d8b73c203c5f7b6b6b3b6ad7",
+                    "input_pub_keys": [
+                        "02782eeb913431ca6e9b8c2fd80a5f72ed2024ef72a3c6fb10263c379937323338"
+                    ]
                 }
             }
         ],
@@ -2466,7 +2545,12 @@
                     "shared_secrets": [
                         "034773b97ccad9791cb4213964ff9896ccd6581ee69345de5d114786d9d86b03a2"
                     ],
-                    "input_private_key_sum": "610e0f75fd05e5e80e088b57af0a46da06cb0700c0c5907aa6d29c6b4ce46348"
+                    "input_private_key_sum": "610e0f75fd05e5e80e088b57af0a46da06cb0700c0c5907aa6d29c6b4ce46348",
+                    "input_pub_keys": [
+                        "025a1e61f898173040e20616d43e9f496fba90338a39faa1ed98fcbaeee4dd9be5",
+                        "03782eeb913431ca6e9b8c2fd80a5f72ed2024ef72a3c6fb10263c379937323338",
+                        "02e0ec4f64b3fa2e463ccfcf4e856e37d5e1e20275bc89ec1def9eb098eff1f85d"
+                    ]
                 }
             }
         ],
@@ -2595,7 +2679,10 @@
                     "shared_secrets": [
                         "0295a54c359da5b2640601ddbedb26e040cb97b6a3432e60b76d1258e85f72fa64"
                     ],
-                    "input_private_key_sum": "eadc78165ff1f8ea94ad7cfdc54990738a4c53f6e0507b42154201b8e5dff3b1"
+                    "input_private_key_sum": "eadc78165ff1f8ea94ad7cfdc54990738a4c53f6e0507b42154201b8e5dff3b1",
+                    "input_pub_keys": [
+                        "025a1e61f898173040e20616d43e9f496fba90338a39faa1ed98fcbaeee4dd9be5"
+                    ]
                 }
             }
         ],
@@ -2724,7 +2811,10 @@
                     "shared_secrets": [
                         "0295a54c359da5b2640601ddbedb26e040cb97b6a3432e60b76d1258e85f72fa64"
                     ],
-                    "input_private_key_sum": "eadc78165ff1f8ea94ad7cfdc54990738a4c53f6e0507b42154201b8e5dff3b1"
+                    "input_private_key_sum": "eadc78165ff1f8ea94ad7cfdc54990738a4c53f6e0507b42154201b8e5dff3b1",
+                    "input_pub_keys": [
+                        "025a1e61f898173040e20616d43e9f496fba90338a39faa1ed98fcbaeee4dd9be5"
+                    ]
                 }
             }
         ],
@@ -2841,7 +2931,11 @@
                     "shared_secrets": [
                         "03dd5fd04d3c8863be750a1bd7474df06161461d38d3ce1397a5c78cee112cdcd2"
                     ],
-                    "input_private_key_sum": "ee55616ce5a93e508f03f21949ecbe70a2a0b107b6e1df5d98b4e4da4adaca1b"
+                    "input_private_key_sum": "ee55616ce5a93e508f03f21949ecbe70a2a0b107b6e1df5d98b4e4da4adaca1b",
+                    "input_pub_keys": [
+                        "025a1e61f898173040e20616d43e9f496fba90338a39faa1ed98fcbaeee4dd9be5",
+                        "03782eeb913431ca6e9b8c2fd80a5f72ed2024ef72a3c6fb10263c379937323338"
+                    ]
                 }
             }
         ],
@@ -2939,7 +3033,8 @@
                     ],
                     "shared_secrets": [
                         null
-                    ]
+                    ],
+                    "input_pub_keys": []
                 }
             }
         ],
@@ -3036,6 +3131,10 @@
                     ],
                     "shared_secrets": [
                         null
+                    ],
+                    "input_pub_keys": [
+                        "02557ef3e55b0a52489b4454c1169e06bdea43687a69c1f190eb50781644ab6975",
+                        "03557ef3e55b0a52489b4454c1169e06bdea43687a69c1f190eb50781644ab6975"
                     ]
                 }
             }
