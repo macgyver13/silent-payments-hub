@@ -36,25 +36,16 @@ def encode_silent_payment_address(scan_pubkey: ECPubKey, spend_pubkey: ECPubKey,
     Returns:
         Silent Payment address string (sp1...)
     """
-    # Get compressed public key bytes (33 bytes each)
-    scan_bytes = bytes(scan_pubkey.get_bytes())
-    spend_bytes = bytes(spend_pubkey.get_bytes())
-    
-    # Silent Payment address format: version (0) + scan_pubkey + spend_pubkey
-    # Remove the 0x02/0x03 prefix from compressed pubkeys to get 32-byte x-coordinates
-    scan_x = scan_bytes[1:]  # Remove compression prefix
-    spend_x = spend_bytes[1:]  # Remove compression prefix
-    
-    # Combine: version (0) + scan_x (32 bytes) + spend_x (32 bytes) = 65 bytes
-    data = bytes([0]) + scan_x + spend_x
+    # Silent Payment address format: scan_pubkey + spend_pubkey = 66 bytes
+    data = scan_pubkey.get_bytes(False) + spend_pubkey.get_bytes(False)
     
     # Convert to 5-bit groups for bech32m encoding
     converted = convertbits(data, 8, 5)
     if converted is None:
         raise ValueError("Failed to convert data for bech32m encoding")
     
-    # Encode as bech32m with "sp" or "tsp" HRP (Human Readable Part)
-    address = bech32_encode(hrp, converted, Encoding.BECH32M)
+    # Encode as bech32m with "sp" or "tsp" HRP (Human Readable Part) w/ version 0
+    address = bech32_encode(hrp, [0] + converted, Encoding.BECH32M)
     if address is None:
         raise ValueError("Failed to encode Silent Payment address")
     
@@ -115,6 +106,10 @@ def seed_to_silent_payment_address(seed_phrase: str, passphrase: str = "", netwo
     # Create ECPubKey objects for Silent Payment address encoding
     scan_pubkey = ECPubKey().set(scan_pubkey_bytes)
     spend_pubkey = ECPubKey().set(spend_pubkey_bytes)
+
+    print(f"Scan private key: {scan_private_key.PrivateKey().hex()}")
+    print(f"Scan public key:  {scan_pubkey_bytes.hex()}")
+    print(f"Spend public key: {spend_pubkey_bytes.hex()}")
     
     # Generate Silent Payment address
     return encode_silent_payment_address(scan_pubkey, spend_pubkey, hrp)
