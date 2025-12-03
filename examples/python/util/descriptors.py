@@ -5,6 +5,7 @@
 """Utility functions related to output descriptors"""
 
 import re
+from bip0352.bech32m import bech32_encode, convertbits, Encoding
 
 INPUT_CHARSET = "0123456789()[],'/*abcdefgh@:$%{}IJKLMNOPQRSTUVWXYZ&+-.;<=>?!^_|~ijklmnopqrstuvwxyzABCDEFGH`#\"\\ "
 CHECKSUM_CHARSET = "qpzry9x8gf2tvdw0s3jn54khce6mua7l"
@@ -62,3 +63,32 @@ def drop_origins(s):
     if '#' in s:
         desc = desc[:desc.index('#')]
     return descsum_create(desc)
+
+
+def encode_sp(scan_privkey_bytes: bytes, spend_bytes: bytes, hrp: str = "tspscan") -> str:
+    """
+    Encode scan private key and spend public key into spscan format.
+
+    Args:
+        scan_privkey_bytes: 32-byte scan private key
+        spend_pubkey_bytes: 33-byte compressed spend public key
+        hrp: Human-readable part ("spscan" for mainnet, "tspscan" for testnets)
+
+    Returns:
+        spscan encoded string (e.g., "spscan1q..." or "tspscan1q...")
+    """
+    # Payload: ser_256(b_scan) || ser_P(B_spend)
+    # ser_256 is 32 bytes for private key, ser_P is 33 bytes compressed public key
+    data = scan_privkey_bytes + spend_bytes
+
+    # Convert to 5-bit groups for bech32m encoding
+    converted = convertbits(data, 8, 5)
+    if converted is None:
+        raise ValueError("Failed to convert data for bech32m encoding")
+
+    # Encode as bech32m with version 0 (character "q")
+    encoded = bech32_encode(hrp, [0] + converted, Encoding.BECH32M)
+    if encoded is None:
+        raise ValueError("Failed to encode spscan")
+
+    return encoded

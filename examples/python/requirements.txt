@@ -1,0 +1,17 @@
+# Python dependencies for Silent Payments Hub examples
+# Install with: pip install -r requirements.txt
+
+# === Core Dependencies ===
+# Required for: create_silent_payment_address.py, seed_to_descriptors.py
+
+# BIP39 mnemonic phrase handling
+mnemonic>=0.20
+# BIP32 hierarchical deterministic key derivation
+bip32utils>=0.3.post4
+
+# === Optional Dependencies ===
+# Required for: wallet_receive_scan_for_tweaks.py
+# Alternative BIP32 implementation for wallet scanning
+bip32>=3.4
+# Elliptic curve cryptography operations
+ecdsa>=0.18.0
