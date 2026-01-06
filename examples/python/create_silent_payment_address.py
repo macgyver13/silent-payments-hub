@@ -13,8 +13,8 @@ Example usage:
     python create_silent_payment_address.py "your seed phrase here" signet
     python create_silent_payment_address.py "your seed phrase here" mainnet
     python create_silent_payment_address.py "your seed phrase here" signet --birthdate 926312
-    python create_silent_payment_address.py "your seed phrase here" signet --labels 1 3 5
-    python create_silent_payment_address.py "your seed phrase here" mainnet --birthdate 850000 --labels 1 2
+    python create_silent_payment_address.py "your seed phrase here" signet --labels 1-10,15,20-25
+    python create_silent_payment_address.py "your seed phrase here" mainnet --birthdate 850000 --labels 1,3,5
 
 WARNING: This is for educational purposes only. Handle seeds securely!
 Never share your seed phrase or private keys in production environments.
@@ -22,12 +22,104 @@ Never share your seed phrase or private keys in production environments.
 
 import sys
 import argparse
+import re
 
 import bip32utils
 from mnemonic import Mnemonic
 from util.descriptors import descsum_create, encode_sp
 from bip0352.bech32m import convertbits, bech32_encode, Encoding
-from bip0352.secp256k1 import ECPubKey
+from bip0352.secp256k1 import ECPubKey, ECKey, TaggedHash
+from bip0352.bitcoin_utils import ser_uint32
+
+
+def parse_label_ranges(labels_str: str) -> list[int]:
+    """Parse label range notation into a list of individual label integers.
+    
+    Args:
+        labels_str: Comma-separated labels and ranges (e.g., "1-10,15,20-25")
+    
+    Returns:
+        Sorted list of unique label integers
+        
+    Examples:
+        >>> parse_label_ranges("1-10,15,20-25")
+        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 21, 22, 23, 24, 25]
+        >>> parse_label_ranges("1,3,5")
+        [1, 3, 5]
+    """
+    labels = set()
+    
+    # Split by comma and process each part
+    for part in labels_str.split(','):
+        part = part.strip()
+        if not part:
+            continue
+            
+        # Check if it's a range (e.g., "1-10")
+        if '-' in part:
+            match = re.match(r'^(\d+)-(\d+)$', part)
+            if not match:
+                raise ValueError(f"Invalid label range format: '{part}'. Expected format like '1-10'")
+            start, end = int(match.group(1)), int(match.group(2))
+            if start < 1 or end < 1:
+                raise ValueError(f"Label values must be positive integers > 0. Got range: {start}-{end}")
+            if start > end:
+                raise ValueError(f"Invalid range: {start}-{end}. Start must be <= end.")
+            labels.update(range(start, end + 1))
+        else:
+            # Single label
+            try:
+                label = int(part)
+            except ValueError:
+                raise ValueError(f"Invalid label: '{part}'. Labels must be positive integers.")
+            if label < 1:
+                raise ValueError(f"Label values must be positive integers > 0. Got: {label}")
+            labels.add(label)
+    
+    return sorted(list(labels))
+
+
+def format_label_ranges(labels: list[int]) -> str:
+    """Format a sorted list of labels into compact range notation.
+    
+    Args:
+        labels: Sorted list of label integers
+    
+    Returns:
+        Compact range notation string (e.g., "1-10,15,20-25")
+        
+    Examples:
+        >>> format_label_ranges([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 21, 22, 23, 24, 25])
+        '1-10,15,20-25'
+        >>> format_label_ranges([1, 3, 5])
+        '1,3,5'
+    """
+    if not labels:
+        return ""
+    
+    ranges = []
+    start = labels[0]
+    end = labels[0]
+    
+    for i in range(1, len(labels)):
+        if labels[i] == end + 1:
+            # Continue the current range
+            end = labels[i]
+        else:
+            # End the current range and start a new one
+            if start == end:
+                ranges.append(str(start))
+            else:
+                ranges.append(f"{start}-{end}")
+            start = end = labels[i]
+    
+    # Add the final range
+    if start == end:
+        ranges.append(str(start))
+    else:
+        ranges.append(f"{start}-{end}")
+    
+    return ",".join(ranges)
 
 
 def encode_silent_payment_address(scan_pubkey: ECPubKey, spend_pubkey: ECPubKey, hrp: str = "tsp") -> str:
@@ -55,6 +147,40 @@ def encode_silent_payment_address(scan_pubkey: ECPubKey, spend_pubkey: ECPubKey,
         raise ValueError("Failed to encode Silent Payment address")
     
     return address
+
+
+def generate_label(b_scan: ECKey, m: int) -> bytes:
+    """Generate a label tweak for a given label index.
+    
+    Args:
+        b_scan: The scan private key
+        m: Label index (positive integer)
+    
+    Returns:
+        32-byte label tweak
+    """
+    return TaggedHash("BIP0352/Label", b_scan.get_bytes() + ser_uint32(m))
+
+
+def create_labeled_silent_payment_address(b_scan: ECKey, scan_pubkey: ECPubKey, spend_pubkey: ECPubKey, m: int, hrp: str = "tsp") -> str:
+    """Create a labeled Silent Payment address.
+    
+    Args:
+        b_scan: The scan private key
+        scan_pubkey: The scan public key (unchanged for labels)
+        spend_pubkey: The base spend public key
+        m: Label index (positive integer)
+        hrp: Human-readable part ("sp" for mainnet, "tsp" for testnet/signet)
+    
+    Returns:
+        Labeled Silent Payment address string
+    """
+    # Generate the label tweak and add it to the spend public key
+    G = ECKey().set(1).get_pubkey()
+    B_m = spend_pubkey + generate_label(b_scan, m) * G
+    
+    # Encode with the same scan key but tweaked spend key
+    return encode_silent_payment_address(scan_pubkey, B_m, hrp)
 
 
 def seed_to_silent_payment_address(seed_phrase: str, passphrase: str = "", network: str = "signet", birthdate: int = 842579, labels: list[int] = None) -> str:
@@ -138,9 +264,9 @@ def seed_to_silent_payment_address(seed_phrase: str, passphrase: str = "", netwo
         if not all(isinstance(label, int) and label > 0 for label in labels):
             raise ValueError("All labels must be positive integers greater than 0")
 
-        # Sort labels in ascending order
+        # Sort labels in ascending order and format as compact ranges
         sorted_labels = sorted(labels)
-        labels_str = ",".join(str(label) for label in sorted_labels)
+        labels_str = format_label_ranges(sorted_labels)
 
     # Create descriptors using new format: sp(KEY[,BIRTHDAY][,LABEL,...])
     # Only include birthdate if it's greater than default (842579)
@@ -165,8 +291,24 @@ def seed_to_silent_payment_address(seed_phrase: str, passphrase: str = "", netwo
     
     # Generate Silent Payment address
     print("=== Share with anyone ===")
-    # TODO: derive payment addresses for each label argument
-    return encode_silent_payment_address(scan_pubkey, spend_pubkey, hrp)
+    
+    # Generate base address (unlabeled)
+    base_address = encode_silent_payment_address(scan_pubkey, spend_pubkey, hrp)
+    print(f"Base address (no label): {base_address}")
+    
+    # Derive payment addresses for each label
+    if labels:
+        print("\nLabeled addresses:")
+        # Create ECKey from scan private key bytes for label generation
+        scan_privkey = ECKey().set(scan_privkey_bytes)
+        
+        for label_idx in sorted(labels):
+            labeled_address = create_labeled_silent_payment_address(
+                scan_privkey, scan_pubkey, spend_pubkey, label_idx, hrp
+            )
+            print(f"  Label {label_idx}: {labeled_address}")
+    
+    return base_address
 
 
 def print_detailed_info(seed_phrase: str, network: str = "signet", birthdate: int = 842579, labels: list[int] = None) -> None:
@@ -185,7 +327,6 @@ def print_detailed_info(seed_phrase: str, network: str = "signet", birthdate: in
 
     try:
         address = seed_to_silent_payment_address(seed_phrase, network=network, birthdate=birthdate, labels=labels)
-        print(f"Silent Payment Address: {address}")
 
     except Exception as e:
         print(f"❌ Error: {e}")
@@ -200,8 +341,8 @@ Examples:
   python create_silent_payment_address.py "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about"
   python create_silent_payment_address.py "your seed phrase here" signet
   python create_silent_payment_address.py "your seed phrase here" mainnet --birthdate 926312
-  python create_silent_payment_address.py "your seed phrase here" signet --labels 1 3 5
-  python create_silent_payment_address.py "your seed phrase here" mainnet --birthdate 850000 --labels 1 2
+  python create_silent_payment_address.py "your seed phrase here" signet --labels 1-10,15,20-25
+  python create_silent_payment_address.py "your seed phrase here" mainnet --birthdate 850000 --labels 1,3,5
         """
     )
 
@@ -224,12 +365,20 @@ Examples:
     )
     parser.add_argument(
         "--labels",
-        type=int,
-        nargs="+",
-        help="List of positive integer labels > 0 (will be sorted)"
+        type=str,
+        help="Label ranges and/or individual labels (e.g., '1-10,15,20-25' or '1,3,5')"
     )
 
     args = parser.parse_args()
+
+    # Parse labels if provided
+    labels = None
+    if args.labels:
+        try:
+            labels = parse_label_ranges(args.labels)
+        except ValueError as e:
+            print(f"Error parsing labels: {e}")
+            sys.exit(1)
 
     # If no seed phrase provided, show educational example
     if not args.seed:
@@ -239,18 +388,12 @@ Examples:
             "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about",
             network=args.network,
             birthdate=args.birthdate,
-            labels=args.labels
+            labels=labels
         )
         sys.exit(0)
 
     try:
-        # Validate labels if provided
-        if args.labels:
-            if not all(label > 0 for label in args.labels):
-                print("Error: All labels must be positive integers greater than 0")
-                sys.exit(1)
-
-        print_detailed_info(args.seed, args.network, args.birthdate, args.labels)
+        print_detailed_info(args.seed, args.network, args.birthdate, labels)
 
     except Exception as e:
         print(f"Error: {e}")
